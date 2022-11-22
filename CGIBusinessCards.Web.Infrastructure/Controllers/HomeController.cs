@@ -4,7 +4,7 @@
 // Version:   1.01.001 ()
 // Date:      22-11-22
 // 
-// Module:        Program (Main)
+// Module:        Controller (Home)
 // 
 // Description:   
 // 
@@ -16,7 +16,7 @@
 // 
 // ****************************************************
 
-using CGI.BusinessCards.Web.Models;
+using CGI.BusinessCards.Web.Models.Entities;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -47,7 +47,7 @@ namespace CGI.BusinessCards.Web.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(new ErrorView { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }

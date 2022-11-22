@@ -12,9 +12,8 @@
   <ItemGroup>
     <Folder Include="Infrastructure\Common\" />
     <Folder Include="Infrastructure\Configuration\" />
-    <Folder Include="Infrastructure\Extensions\" />
     <Folder Include="Infrastructure\Global\" />
-    <Folder Include="Models\Entities\" />
+    <Folder Include="Infrastructure\Helpers\" />
   </ItemGroup>
 
   <ItemGroup>

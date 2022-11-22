@@ -4,7 +4,7 @@
 // Version:   1.01.001 ()
 // Date:      22-11-22
 // 
-// Module:        Program (Main)
+// Module:        Service (WeatherForecast)
 // 
 // Description:   
 // 
@@ -16,7 +16,7 @@
 // 
 // ****************************************************
 
-using CGI.BusinessCards.Web.Infrastructure.Helpers;
+using CGI.BusinessCards.Web.Infrastructure.Extensions;
 using CGI.BusinessCards.Web.Services.Interfaces;
 
 using System;

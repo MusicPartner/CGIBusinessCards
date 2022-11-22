@@ -4,7 +4,7 @@
 // Version:   1.01.001 ()
 // Date:      22-11-22
 // 
-// Module:        Program (Main)
+// Module:        Middleware (SwaggerBasicAuth)
 // 
 // Description:   
 // 

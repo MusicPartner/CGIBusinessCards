@@ -4,7 +4,7 @@
 // Version:   1.01.001 ()
 // Date:      22-11-22
 // 
-// Module:        Program (Main)
+// Module:        Extension (HttpClient)
 // 
 // Description:   
 // 
@@ -21,7 +21,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace CGI.BusinessCards.Web.Infrastructure.Helpers
+namespace CGI.BusinessCards.Web.Infrastructure.Extensions
 {
     public static class HttpClientExtensions
     {

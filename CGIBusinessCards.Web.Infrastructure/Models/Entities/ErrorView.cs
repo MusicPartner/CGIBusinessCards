@@ -4,7 +4,7 @@
 // Version:   1.01.001 ()
 // Date:      22-11-22
 // 
-// Module:        Program (Main)
+// Module:        Model (ErrorView)
 // 
 // Description:   
 // 
@@ -16,11 +16,11 @@
 // 
 // ****************************************************
 
-namespace CGI.BusinessCards.Web.Models
+namespace CGI.BusinessCards.Web.Models.Entities
 {
-    public class ErrorViewModel
+    public class ErrorView
     {
-        public string? RequestId { get; set; }
+        public string RequestId { get; set; }
 
         public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
     }
