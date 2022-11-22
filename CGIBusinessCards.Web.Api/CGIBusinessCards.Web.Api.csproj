@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Title>CGI BusinessCards (Web Api)</Title>
+	<Company>CGI</Company>
+	<Copyright>Copyright © 2022 CGI</Copyright>
+	<Version>1.0.1</Version>
+    <UserSecretsId>21ad392b-55b6-41df-8dfa-f462cdbf28be</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="7.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CGIBusinessCards.Web.Infrastructure\CGIBusinessCards.Web.Infrastructure.csproj">
+      <TreatAsUsed>true</TreatAsUsed>
+    </ProjectReference>
+  </ItemGroup>
+
+</Project>

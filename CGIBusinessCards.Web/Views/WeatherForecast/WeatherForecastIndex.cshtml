@@ -1,0 +1,32 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model IEnumerable<CGI.BusinessCards.Web.Api.Models.Entities.WeatherForecastModel>
+
+<br/>
+<br/>
+<table class="table">
+        <tdead>
+            <tr>
+                <th>Date</th>
+                <th>Temperature C</th>
+                <th>Temperature F</th>
+                <th>Summary</th>
+            </tr>
+        </tdead>
+            <tbody>
+        @foreach (var item in Model)
+        {
+                        <tr>
+                            <td>@item.Date</td>
+                            <td>@item.TemperatureC</td>
+                            <td>@item.TemperatureF</td>
+                            <td>@item.Summary</td>
+                        </tr>
+        }
+            </tbody>
+    </table>
+</div>

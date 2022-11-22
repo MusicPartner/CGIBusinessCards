@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <RootNamespace>CGI.BusinessCards.Web.Api</RootNamespace>
+	<Title>CGI BusinessCards (Web Api Infrastructure)</Title>
+	<Company>CGI</Company>
+	<Copyright>Copyright © 2022 CGI</Copyright>
+	<Version>1.0.1</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Infrastructure\Global\" />
+    <Folder Include="Infrastructure\Helpers\" />
+    <Folder Include="Models\Interfaces\" />
+    <Folder Include="Models\Response\" />
+    <Folder Include="Models\Request\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.0.1" />
+    <PackageReference Include="Portable.System.DateTimeOnly" Version="6.0.3" />
+  </ItemGroup>
+
+</Project>
