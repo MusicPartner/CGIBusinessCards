@@ -22,6 +22,7 @@ using CGI.BusinessCards.Web.Api.Models.Entities;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 
+using System;
 using System.Collections.Generic;
 using System.Data;
 
@@ -60,6 +61,7 @@ namespace CGI.BusinessCards.Web.Api.Infrastructure.Common
                         FirstName = srdBusinessCards.GetDef<string>("FirstName").ToString(),
                         LastName = srdBusinessCards.GetDef<string>("LastName"),
                         PhoneNumber = srdBusinessCards.GetDef<string>("PhoneNumber"),
+                        Email = srdBusinessCards.GetDef<string>("Email"),
                         Image = srdBusinessCards.GetDef<string>("Image")
                     };
 
@@ -92,6 +94,7 @@ namespace CGI.BusinessCards.Web.Api.Infrastructure.Common
                     bcBusinessCard.FirstName = srdBusinessCard.GetDef<string>("FirstName");
                     bcBusinessCard.LastName = srdBusinessCard.GetDef<string>("LastName");
                     bcBusinessCard.PhoneNumber = srdBusinessCard.GetDef<string>("PhoneNumber");
+                    bcBusinessCard.Email = srdBusinessCard.GetDef<string>("Email");
                     bcBusinessCard.Image = srdBusinessCard.GetDef<string>("Image");
                 }
             }
@@ -99,22 +102,120 @@ namespace CGI.BusinessCards.Web.Api.Infrastructure.Common
             return bcBusinessCard;
         }
 
-        public BusinessCard DbAdd(int iBusinessCardId)
+        public BusinessCard DbAdd(BusinessCard bcBusinessCard)
         {
+            var bcAddedBusinessCard = new BusinessCard();
 
-            return null;
+            // Add BusinessCard
+            string sSql = "INSERT INTO tblBusinessCards (FirstName, LastName, PhoneNumber, Email, Image) ";
+            sSql += "VALUES (@sFirstName, @sLastName, @sPhoneNumber, @sEmail, @sImage);";
+            sSql += "SELECT SCOPE_IDENTITY()";
+
+            // Add Query Parameters
+            List<SqlParameter> parameterAddBusinessCard = new List<SqlParameter>();
+            parameterAddBusinessCard.Add(_baseDataAccess.GetParameter("@sFirstName", bcBusinessCard.FirstName));
+            parameterAddBusinessCard.Add(_baseDataAccess.GetParameter("@sLastName", bcBusinessCard.LastName));
+            parameterAddBusinessCard.Add(_baseDataAccess.GetParameter("@sPhoneNumber", bcBusinessCard.PhoneNumber));
+            parameterAddBusinessCard.Add(_baseDataAccess.GetParameter("@sEmail", bcBusinessCard.Email));
+            parameterAddBusinessCard.Add(_baseDataAccess.GetParameter("@sImage", bcBusinessCard.Image));
+
+            try
+            {
+                int iAddBusinessCardID = Convert.ToInt32(_baseDataAccess.ExecuteScalar(sSql, parameterAddBusinessCard, CommandType.Text));
+
+                // Check if Add was Success
+                if (iAddBusinessCardID > 0)
+                {
+                    // Get BusinessCard
+                    bcAddedBusinessCard = DbGet(iAddBusinessCardID);
+                }
+                else
+                {
+                    // Add BusinessCard Failed
+                    _logger.LogError("Database Add Failed: Add BusinessCard"); // Log
+                }
+            }
+            catch (SqlException ex)
+            {
+                // Log
+                _logger.LogError("Database Add Failed: Add BusinessCard", ex);
+
+                // Error Add BusinessCard Return Not Succesful
+                return bcAddedBusinessCard;
+            }
+
+            return bcAddedBusinessCard;
         }
 
-        public BusinessCard DbUpdate(int iBusinessCardId)
+        public bool DbUpdate(int iBusinessCardId, BusinessCard bcBusinessCard)
         {
+            // Validate BusinessCard ID
+            if (iBusinessCardId == 0)
+            {
+                // Not a Valid BusinessCard ID Return Not Succesful 
+                return false;
+            }
 
-            return null;
+            // Update BusinessCard
+            string sSql = "UPDATE tblBusinessCards ";
+            sSql += "SET FirstName = @sFirstName, LastName = @sLastName, PhoneNumber = @sPhoneNumber, Email = @sEmail, Image = @sImage ";
+            sSql += "WHERE (tblBusinessCards.ID =  @iBusinessCardID)";
+
+            // Add Query Parameters
+            List<SqlParameter> parameterUpdateBusinessCard = new List<SqlParameter>();
+            parameterUpdateBusinessCard.Add(_baseDataAccess.GetParameter("@iBusinessCardId", iBusinessCardId));
+            parameterUpdateBusinessCard.Add(_baseDataAccess.GetParameter("@sFirstName", bcBusinessCard.FirstName));
+            parameterUpdateBusinessCard.Add(_baseDataAccess.GetParameter("@sLastName", bcBusinessCard.LastName));
+            parameterUpdateBusinessCard.Add(_baseDataAccess.GetParameter("@sPhoneNumber", bcBusinessCard.PhoneNumber));
+            parameterUpdateBusinessCard.Add(_baseDataAccess.GetParameter("@sEmail", bcBusinessCard.Email));
+            parameterUpdateBusinessCard.Add(_baseDataAccess.GetParameter("@sImage", bcBusinessCard.Image));
+
+            try
+            {
+                _baseDataAccess.ExecuteNonQuery(sSql, parameterUpdateBusinessCard, CommandType.Text);
+            }
+            catch (SqlException ex)
+            {
+                // Log
+                _logger.LogError("Database Update Failed: Update BusinessCard", ex);
+
+                // Error Update BusinessCard Return Not Succesful
+                return false;
+            }
+
+            return true;
         }
 
-        public BusinessCard DbDelete(int iBusinessCardId)
+        public bool DbDelete(int iBusinessCardId)
         {
+            // Validate BusinessCard ID
+            if (iBusinessCardId == 0)
+            {
+                // Not a Valid BusinessCard ID Return Not Succesful 
+                return false;
+            }
 
-            return null;
+            // Update BusinessCard
+            string sSql = "DELETE FROM tblBusinessCards WHERE ID = @iBusinessCardId";
+
+            // Add Query Parameters
+            List<SqlParameter> parameterDeleteBusinessCard = new List<SqlParameter>();
+            parameterDeleteBusinessCard.Add(_baseDataAccess.GetParameter("@iBusinessCardId", iBusinessCardId));
+
+            try
+            {
+                _baseDataAccess.ExecuteNonQuery(sSql, parameterDeleteBusinessCard, CommandType.Text);
+            }
+            catch (SqlException ex)
+            {
+                // Log
+                _logger.LogError("Database Delete Failed: Delete BusinessCard", ex);
+
+                // Error Delete BusinessCard Return Not Succesful
+                return false;
+            }
+
+            return true;
         }
     }
 }

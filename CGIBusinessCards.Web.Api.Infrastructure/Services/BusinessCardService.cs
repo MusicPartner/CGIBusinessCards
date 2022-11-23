@@ -50,6 +50,7 @@ namespace CGI.BusinessCards.Web.Api.Services
             // Get from DB
             liBusinessCards = _businessCardDataAccess.DbGetAll();
 
+            // Return Result
             return liBusinessCards;
         }
 
@@ -61,22 +62,35 @@ namespace CGI.BusinessCards.Web.Api.Services
             // Get from DB
             bcBusinessCard = _businessCardDataAccess.DbGet(iBusinessCardId);
 
+            // Return Result
             return bcBusinessCard;
         }
 
-        public BusinessCard Add(BusinessCardDTO bcdDusinessCard)
+        public BusinessCard Add(BusinessCard bcBusinessCard)
         {
-            throw new System.NotImplementedException();
+            // Add to DB
+            BusinessCard bcAddBusinessCardResult = _businessCardDataAccess.DbAdd(bcBusinessCard);
+
+            // Return Result
+            return bcAddBusinessCardResult;
         }
 
-        public BusinessCard Update(BusinessCardDTO bcdDusinessCard)
+        public bool Update(int iBusinessCardId, BusinessCard bcBusinessCard)
         {
-            throw new System.NotImplementedException();
+            // Update in DB
+            bool bUpdateResult = _businessCardDataAccess.DbUpdate(iBusinessCardId, bcBusinessCard);
+
+            // Return Result //TODO Return UpdatedBusinessCard
+            return bUpdateResult;
         }
 
-        public BusinessCard Delete(int iBusinessCardId)
+        public bool Delete(int iBusinessCardId)
         {
-            throw new System.NotImplementedException();
+            // Delete from DB
+            bool bDeleteResult = _businessCardDataAccess.DbDelete(iBusinessCardId);
+
+            // Return Result
+            return bDeleteResult;
         }
     }
 }

@@ -26,11 +26,11 @@ namespace CGI.BusinessCards.Web.Api.Models.Entities.Dto
 
         [Required]
         [MaxLength(50)]
-        public string FirstNAme { get; set; }
+        public string FirstName { get; set; }
 
         [Required]
         [MaxLength(50)]
-        public string LastNAme { get; set; }
+        public string LastName { get; set; }
 
         [MaxLength(20)]
         public string PhoneNumber { get; set; }

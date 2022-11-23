@@ -49,7 +49,7 @@ namespace CGI.BusinessCards.Web.Api.Controllers
         [HttpGet(Name = "GetBusinessCards")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult Get()
+        public ActionResult GetBusinessCards()
         {
             // Get All BusinessCards
             IEnumerable<BusinessCard> businessCards = _businessCardService.GetAll();
@@ -61,7 +61,7 @@ namespace CGI.BusinessCards.Web.Api.Controllers
                 _logger.LogInformation("Get BusinessCards Not Found");
 
                 // Return NotFound
-                return new NotFoundResult();
+                return StatusCode(StatusCodes.Status404NotFound);
             }
 
             // Convert to DTO
@@ -72,8 +72,9 @@ namespace CGI.BusinessCards.Web.Api.Controllers
             {
                 businessCardsDTO.Add(new BusinessCardDTO
                 {
-                    FirstNAme = businessCard.FirstName,
-                    LastNAme = businessCard.LastName,
+                    Id = businessCard.Id,
+                    FirstName = businessCard.FirstName,
+                    LastName = businessCard.LastName,
                     PhoneNumber = businessCard.PhoneNumber,
                     Email = businessCard.Email,
                     Image = businessCard.Image
@@ -88,7 +89,7 @@ namespace CGI.BusinessCards.Web.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult Get(int iBusinessCardId)
+        public ActionResult GetBusinessCard(int iBusinessCardId)
         {
             // Validate BusinessCard ID
             if (iBusinessCardId == 0)
@@ -100,7 +101,7 @@ namespace CGI.BusinessCards.Web.Api.Controllers
                 return BadRequest();
             }
 
-            // Get All BusinessCards
+            // Get BusinessCard
             BusinessCard bcBusinessCards = _businessCardService.Get(iBusinessCardId);
 
             //Check if NotFound
@@ -110,14 +111,15 @@ namespace CGI.BusinessCards.Web.Api.Controllers
                 _logger.LogInformation("Get BusinessCard Not Found");
 
                 // Return NotFound
-                return new NotFoundResult();
+                return StatusCode(StatusCodes.Status404NotFound);
             }
 
             // Convert to DTO
             BusinessCardDTO bcdBusinessCardDTO = new BusinessCardDTO()
             {
-                FirstNAme = bcBusinessCards.FirstName,
-                LastNAme = bcBusinessCards.LastName,
+                Id = bcBusinessCards.Id,
+                FirstName = bcBusinessCards.FirstName,
+                LastName = bcBusinessCards.LastName,
                 PhoneNumber = bcBusinessCards.PhoneNumber,
                 Email = bcBusinessCards.Email,
                 Image = bcBusinessCards.Image
@@ -131,69 +133,137 @@ namespace CGI.BusinessCards.Web.Api.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult Add([FromBody]BusinessCardDTO bcBusinessCardDTO)
+        public ActionResult AddBusinessCard([FromBody]BusinessCardDTO bcBusinessCardDTO)
         {
+            // Validate Input
             if (bcBusinessCardDTO == null)
             {
                 // Log
-                _logger.LogWarning("Create BusinessCard Failed");
+                _logger.LogWarning("Add BusinessCard Failed");
 
                 // Return Bad Request
                 return BadRequest(bcBusinessCardDTO);
             }
 
+            // Validate Input ID
             if (bcBusinessCardDTO.Id > 0)
             {
                 // Log
-                _logger.LogError("Create BusinessCard Invalid Id");
+                _logger.LogError("Add BusinessCard Invalid Id");
 
                 // Return Internal Server Error
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
-            //_productContext.Products.Add(product);
-            //await _productContext.SaveChangesAsync();
+            // Convert from DTO
+            BusinessCard bcBusinessCard = new BusinessCard()
+            {
+                FirstName = bcBusinessCardDTO.FirstName,
+                LastName = bcBusinessCardDTO.LastName,
+                PhoneNumber = bcBusinessCardDTO.PhoneNumber,
+                Email = bcBusinessCardDTO.Email,
+                Image = bcBusinessCardDTO.Image
+            };
 
-            return CreatedAtAction("", "", null, null); //nameof(GetById_IActionResult), new { id = product.Id }, product
+            // Add BusinessCard
+            BusinessCard bcAddBusinessCardResult = _businessCardService.Add(bcBusinessCard);
+
+            // Validate if Succesful
+            if (bcAddBusinessCardResult.Id == 0)
+            {
+                // Log
+                _logger.LogError("Add BusinessCard Failed");
+
+                // Return Internal Server Error
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+            return CreatedAtRoute(nameof(GetBusinessCard), new { iBusinessCardId = bcAddBusinessCardResult.Id }, bcAddBusinessCardResult);
         }
 
         [HttpPut("{iBusinessCardId:int}", Name = "UpdateBusinessCard")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult Update(int iBusinessCardId, [FromBody] BusinessCardDTO bcBusinessCardDTO)
+        public ActionResult UpdateBusinessCard(int iBusinessCardId, [FromBody] BusinessCardDTO bcBusinessCardDTO)
         {
+            // Validate
             if (bcBusinessCardDTO == null)
             {
                 // Log
-                _logger.LogWarning("Create BusinessCard Failed");
+                _logger.LogWarning("Update BusinessCard Failed");
 
                 // Return Bad Request
                 return BadRequest(bcBusinessCardDTO);
             }
 
-            if (bcBusinessCardDTO.Id > 0)
+            // Validate ID
+            if (iBusinessCardId == 0)
             {
                 // Log
-                _logger.LogError("Create BusinessCard Invalid Id");
+                _logger.LogError("Update BusinessCard Invalid Id");
 
                 // Return Internal Server Error
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
-            //_productContext.Products.Add(product);
-            //await _productContext.SaveChangesAsync();
+            // Convert from DTO
+            BusinessCard bcBusinessCard = new BusinessCard()
+            {
+                FirstName = bcBusinessCardDTO.FirstName,
+                LastName = bcBusinessCardDTO.LastName,
+                PhoneNumber = bcBusinessCardDTO.PhoneNumber,
+                Email = bcBusinessCardDTO.Email,
+                Image = bcBusinessCardDTO.Image
+            };
 
-            return CreatedAtAction("", "", null, null); //nameof(GetById_IActionResult), new { id = product.Id }, product
+            // Update BusinessCard
+            bool bResultAddBusinessCard = _businessCardService.Update(iBusinessCardId, bcBusinessCard);
+
+            return NoContent();
         }
 
         [HttpDelete("{iBusinessCardId:int}", Name = "DeleteBusinessCard")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult Delete(int iBusinessCardId)
+        public ActionResult DeleteBusinessCard(int iBusinessCardId)
         {
+            // Validate ID
+            if (iBusinessCardId == 0)
+            {
+                // Log
+                _logger.LogError("Delete BusinessCard Invalid Id");
 
-            return null;
+                // Return Internal Server Error
+                return BadRequest();
+            }
+
+            // Validate ID Exists
+            BusinessCard bcBusinessCards = _businessCardService.Get(iBusinessCardId);
+            if (bcBusinessCards.Id == 0)
+            {
+                // Log
+                _logger.LogInformation("Delete BusinessCard Not Found");
+
+                // Return NotFound
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+
+            // Delete BusinessCard
+            bool bResultDeleteBusinessCard = _businessCardService.Delete(iBusinessCardId);
+
+            // Check if Delete Failed
+            if (bResultDeleteBusinessCard == false)
+            {
+                // Log
+                _logger.LogWarning("Deelete BusinessCard Failed");
+
+                // Return Bad Request
+                return BadRequest();
+            }
+
+            // Return Result
+            return NoContent();
         }
         
     }

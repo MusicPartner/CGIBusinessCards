@@ -27,8 +27,8 @@ namespace CGI.BusinessCards.Web.Api.Services.Interfaces
     {
         IEnumerable<BusinessCard> GetAll();
         BusinessCard Get(int iBusinessCardId);
-        BusinessCard Add(BusinessCardDTO bcdDusinessCard);
-        BusinessCard Update(BusinessCardDTO bcdDusinessCard);
-        BusinessCard Delete(int iBusinessCardId);
+        BusinessCard Add(BusinessCard bcBusinessCard);
+        bool Update(int iBusinessCardId, BusinessCard bcBusinessCard);
+        bool Delete(int iBusinessCardId);
     }
 }
