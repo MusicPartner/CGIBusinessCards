@@ -1,0 +1,34 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model IEnumerable< CGI.BusinessCards.Web.Api.Models.Entities.Dto.BusinessCardDTO>
+
+<br />
+<br />
+<table class="table">
+    <tdead>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Phone Number</th>
+            <th>Email</th>
+            <th>Image</th>
+        </tr>
+    </tdead>
+    <tbody>
+        @foreach (var bcBusinessCard in Model)
+        {
+            <tr>
+                <td>@bcBusinessCard.FirstNAme</td>
+                <td>@bcBusinessCard.LastNAme</td>
+                <td>@bcBusinessCard.PhoneNumber</td>
+                <td>@bcBusinessCard.Email</td>
+                <td>@bcBusinessCard.Image</td>
+            </tr>
+        }
+    </tbody>
+</table>
+</div>

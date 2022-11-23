@@ -2,9 +2,9 @@
 // Made by CGI, Copyright CGI
 // 
 // Version:   1.01.001 ()
-// Date:      22-11-22
+// Date:      22-11-23
 // 
-// Module:        Service (WeatherForecast)
+// Module:        Service (BusinessCard)
 // 
 // Description:   
 // 
@@ -16,6 +16,7 @@
 // 
 // ****************************************************
 
+using CGI.BusinessCards.Web.Api.Models.Entities.Dto;
 using CGI.BusinessCards.Web.Infrastructure.Extensions;
 using CGI.BusinessCards.Web.Services.Interfaces;
 
@@ -26,21 +27,21 @@ using System.Threading.Tasks;
 
 namespace CGI.BusinessCards.Web.Services
 {
-    public class WeatherForecastService : IWeatherForecastService
+    public class BusinessCardService : IBusinessCardService
     {
         private readonly HttpClient _client;
-        public const string BasePath = "/api/WeatherForecast";
+        public const string BasePath = "/api/businesscard";
 
-        public WeatherForecastService(HttpClient client)
+        public BusinessCardService(HttpClient client)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
         }
 
-        public async Task<IEnumerable<Api.Models.Entities.WeatherForecastModel>> Find()
+        public async Task<IEnumerable<BusinessCardDTO>> Get()
         {
             var response = await _client.GetAsync(BasePath);
 
-            return await response.ReadContentAsync<List<Api.Models.Entities.WeatherForecastModel>>();
+            return await response.ReadContentAsync<List<BusinessCardDTO>>();
         }
     }
 }

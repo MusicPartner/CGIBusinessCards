@@ -2,9 +2,9 @@
 // Made by CGI, Copyright CGI
 // 
 // Version:   1.01.001 ()
-// Date:      22-11-22
+// Date:      22-11-23
 // 
-// Module:        Controller (WeatherForecast)
+// Module:        Controller (BusinessCard)
 // 
 // Description:   
 // 
@@ -26,35 +26,37 @@ using System.Threading.Tasks;
 
 namespace CGI.BusinessCards.Web.Controllers
 {
-    public class WeatherForecastController : Controller
+    public class BusinessCardController : Controller
     {
-        private readonly IWeatherForecastService _service;
+        private readonly IBusinessCardService _service;
 
-        public WeatherForecastController(IWeatherForecastService service)
+        public BusinessCardController(IBusinessCardService service)
         {
             _service = service ?? throw new ArgumentException(nameof(service));
         }
 
-        // GET: WeatherForecastController
-        public async Task<IActionResult> WeatherForecastIndex()
+        // GET: BusinessCardController
+        public async Task<IActionResult> BusinessCardIndex()
         {
-            var products = await _service.Find();
-            return View(products);
+            // Get BusinessCards from API
+            var bcBusinessCards = await _service.Get();
+
+            return View(bcBusinessCards);
         }
 
-        // GET: WeatherForecastController/Details/5
+        // GET: BusinessCardController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: WeatherForecastController/Create
+        // GET: BusinessCardController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: WeatherForecastController/Create
+        // POST: BusinessCardController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
@@ -69,13 +71,13 @@ namespace CGI.BusinessCards.Web.Controllers
             }
         }
 
-        // GET: WeatherForecastController/Edit/5
+        // GET: BusinessCardController/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: WeatherForecastController/Edit/5
+        // POST: BusinessCardController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
@@ -90,13 +92,13 @@ namespace CGI.BusinessCards.Web.Controllers
             }
         }
 
-        // GET: WeatherForecastController/Delete/5
+        // GET: BusinessCardController/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: WeatherForecastController/Delete/5
+        // POST: BusinessCardController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)

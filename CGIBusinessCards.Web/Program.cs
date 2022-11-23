@@ -30,7 +30,8 @@ namespace BusinessCards.Web
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            builder.Services.AddHttpClient<IWeatherForecastService, WeatherForecastService>(c =>
+            // Add Service BusinessCard
+            builder.Services.AddHttpClient<IBusinessCardService, BusinessCardService>(c =>
             c.BaseAddress = new Uri("https://localhost:7128/"));
 
             var app = builder.Build();

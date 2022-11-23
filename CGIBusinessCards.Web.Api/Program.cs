@@ -18,6 +18,8 @@
 
 using CGI.BusinessCards.Web.Api.Infrastructure.Common;
 using CGI.BusinessCards.Web.Api.Infrastructure.Configuration;
+using CGI.BusinessCards.Web.Api.Services;
+using CGI.BusinessCards.Web.Api.Services.Interfaces;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
@@ -85,6 +87,15 @@ namespace BusinessCards.Web.Api
             // Get Secrets and Store Static
             ApplicationSettingsGlobal.businessCardsSwaggerUser = builder.Configuration["CGIBusinessCards:SwaggerAuthenticationUser"];
             ApplicationSettingsGlobal.businessCardsSwaggerPassword = builder.Configuration["CGIBusinessCards:SwaggerAuthenticationPassword"];
+
+            // Singletons
+
+            // Transients
+            builder.Services.AddTransient<IBusinessCardService, BusinessCardService>();
+
+            // Scoped
+            builder.Services.AddScoped<BaseDataAccess>();
+            builder.Services.AddScoped<BusinessCardDataAccess>();
 
             // Initialize
             var app = builder.Build();

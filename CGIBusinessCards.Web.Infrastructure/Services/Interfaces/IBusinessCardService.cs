@@ -2,9 +2,9 @@
 // Made by CGI, Copyright CGI
 // 
 // Version:   1.01.001 ()
-// Date:      22-11-22
+// Date:      22-11-23
 // 
-// Module:        Interface (WeatherForecastService)
+// Module:        Interface (BusinessCardService)
 // 
 // Description:   
 // 
@@ -16,15 +16,15 @@
 // 
 // ****************************************************
 
-using CGI.BusinessCards.Web.Api.Models.Entities;
+using CGI.BusinessCards.Web.Api.Models.Entities.Dto;
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace CGI.BusinessCards.Web.Services.Interfaces
 {
-    public interface IWeatherForecastService
+    public interface IBusinessCardService
     {
-        Task<IEnumerable<WeatherForecastModel>> Find();
+        Task<IEnumerable<BusinessCardDTO>> Get();
     }
 }

@@ -42,32 +42,25 @@ namespace CGI.BusinessCards.Web.Api.Infrastructure.Common
             _baseDataAccess = baseDataAccess;
         }
 
-        public List<BusinessCard> DbGetAll(string pairingToken)
+        public List<BusinessCard> DbGetAll()
         {
             var liBusinessCards = new List<BusinessCard>();
 
             string sSql = "";
-            sSql = "SELECT	{tblCustomer}.ID AS CustomerID, {tblCustomer}.Name AS CustomerName, {tblCommonFacilityPrefix}UserDetails.FacilityToken, {tblCommonFacilityPrefix}UserDetails.Pincode ";
-            sSql += "FROM    {tblCommonFacilityPrefix}Facilities INNER JOIN ";
-            sSql += "        {tblCommonFacilityPrefix}FacilityUsers ON {tblCommonFacilityPrefix}Facilities.ID = {tblCommonFacilityPrefix}FacilityUsers.FacilityID INNER JOIN ";
-            sSql += "        {tblCustomer} ON {tblCommonFacilityPrefix}FacilityUsers.CustomerID = {tblCustomer}.ID LEFT OUTER JOIN ";
-            sSql += "        {tblCommonFacilityPrefix}UserDetails ON {tblCommonFacilityPrefix}FacilityUsers.CustomerID = {tblCommonFacilityPrefix}UserDetails.CustomerID ";
-            sSql += "WHERE   ({tblCommonFacilityPrefix}Facilities.PairingToken = @PairingToken)";
+            sSql = "SELECT tblBusinessCards.ID AS BusinessCardID, tblBusinessCards.FirstName, tblBusinessCards.LastName, tblBusinessCards.PhoneNumber, tblBusinessCards.Email, tblBusinessCards.Image ";
+            sSql += "FROM    tblBusinessCards";
 
-            // Add Query Parameters
-            List<SqlParameter> parameterListBusinessCards = new List<SqlParameter>();
-            parameterListBusinessCards.Add(_baseDataAccess.GetParameter("@PairingToken", pairingToken));
-
-            using (SqlDataReader srdBusinessCards = _baseDataAccess.GetDataReader(sSql, parameterListBusinessCards, CommandType.Text))
+            using (SqlDataReader srdBusinessCards = _baseDataAccess.GetDataReader(sSql, null, CommandType.Text))
             {
                 while (srdBusinessCards.Read())
                 {
                     var uBusinessCard = new BusinessCard
                     {
-                        FirstName = srdBusinessCards.GetDef<int>("CustomerID").ToString(),
-                        LastName = srdBusinessCards.GetDef<string>("FacilityToken"),
-                        PhoneNumber = srdBusinessCards.GetDef<string>("CustomerName"),
-                        Image = srdBusinessCards.GetDef<string>("Pincode")
+                        Id = srdBusinessCards.GetDef<int>("BusinessCardID"),
+                        FirstName = srdBusinessCards.GetDef<string>("FirstName").ToString(),
+                        LastName = srdBusinessCards.GetDef<string>("LastName"),
+                        PhoneNumber = srdBusinessCards.GetDef<string>("PhoneNumber"),
+                        Image = srdBusinessCards.GetDef<string>("Image")
                     };
 
                     liBusinessCards.Add(uBusinessCard);
@@ -77,64 +70,51 @@ namespace CGI.BusinessCards.Web.Api.Infrastructure.Common
             return liBusinessCards;
         }
 
-        public BusinessCard DbGet(int businessCardId)
+        public BusinessCard DbGet(int iBusinessCardId)
         {
-            var uBusinessCard = new BusinessCard();
+            var bcBusinessCard = new BusinessCard();
 
             string sSql = "";
 
-            // Add Query Parameters
-            List<SqlParameter> parameterCountBusinessCardDetail = new List<SqlParameter>();
-            parameterCountBusinessCardDetail.Add(_baseDataAccess.GetParameter("@businessCardId", businessCardId));
-
-            int iCountBusinessCardDetail = (int)_baseDataAccess.ExecuteScalar("SELECT Count(*) FROM {tblCommonFacilityPrefix}UserDetails WHERE CustomerID = @userId", parameterCountBusinessCardDetail, CommandType.Text);
-
-            //Check if we found a BusinessCardDetail, if not Add
-            if (iCountBusinessCardDetail == 0)
-            {
-                //Check if UserDetails are missing
-                sSql = "INSERT INTO {tblCommonFacilityPrefix}UserDetails (CustomerID) ";
-                sSql += "VALUES (@businessCardId)";
-
-                // Add Query Parameters
-                List<SqlParameter> parameterAddBusinessCardDetail = new List<SqlParameter>();
-                parameterAddBusinessCardDetail.Add(_baseDataAccess.GetParameter("@businessCardId", businessCardId));
-
-                try
-                {
-                    _baseDataAccess.ExecuteNonQuery(sSql, parameterAddBusinessCardDetail, CommandType.Text);
-                }
-                catch (SqlException ex)
-                {
-                    // Log
-                    _logger.LogError(ex.Message, ex);
-
-                    // Error Add UserDetail Return Not Succesful
-                    return null;
-                }
-            }
-
-            sSql = "SELECT {tblCustomer}.ID AS CustomerID, {tblCustomer}.Name AS CustomerName, {tblCommonFacilityPrefix}UserDetails.FacilityToken, {tblCommonFacilityPrefix}UserDetails.Pincode ";
-            sSql += "FROM   {tblCustomer} INNER JOIN ";
-            sSql += "       {tblCommonFacilityPrefix}UserDetails ON {tblCustomer}.ID = {tblCommonFacilityPrefix}UserDetails.CustomerID ";
-            sSql += "WHERE  ({tblCommonFacilityPrefix}UserDetails.CustomerID = @userId)";
+            sSql = "SELECT	tblBusinessCards.ID AS BusinessCardID, tblBusinessCards.FirstName, tblBusinessCards.LastName, tblBusinessCards.PhoneNumber, tblBusinessCards.Email, tblBusinessCards.Image ";
+            sSql += "FROM    tblBusinessCards ";
+            sSql += "WHERE  (tblBusinessCards.ID = @iBusinessCardId)";
 
             // Add Query Parameters
-            List<SqlParameter> parameterListBusinessCard = new List<SqlParameter>();
-            parameterListBusinessCard.Add(_baseDataAccess.GetParameter("@businessCardId", businessCardId));
+            List<SqlParameter> parameterGetBusinessCard = new List<SqlParameter>();
+            parameterGetBusinessCard.Add(_baseDataAccess.GetParameter("@iBusinessCardId", iBusinessCardId));
 
-            using (SqlDataReader srdBusinessCard = _baseDataAccess.GetDataReader(sSql, parameterListBusinessCard, CommandType.Text))
+            using (SqlDataReader srdBusinessCard = _baseDataAccess.GetDataReader(sSql, parameterGetBusinessCard, CommandType.Text))
             {
                 while (srdBusinessCard.Read())
                 {
-                    uBusinessCard.FirstName = srdBusinessCard.GetDef<int>("CustomerID").ToString();
-                    uBusinessCard.LastName = srdBusinessCard.GetDef<string>("FacilityToken");
-                    uBusinessCard.PhoneNumber = srdBusinessCard.GetDef<string>("CustomerName");
-                    uBusinessCard.Image = srdBusinessCard.GetDef<string>("Pincode");
+                    bcBusinessCard.Id = srdBusinessCard.GetDef<int>("BusinessCardID");
+                    bcBusinessCard.FirstName = srdBusinessCard.GetDef<string>("FirstName");
+                    bcBusinessCard.LastName = srdBusinessCard.GetDef<string>("LastName");
+                    bcBusinessCard.PhoneNumber = srdBusinessCard.GetDef<string>("PhoneNumber");
+                    bcBusinessCard.Image = srdBusinessCard.GetDef<string>("Image");
                 }
             }
 
-            return uBusinessCard;
+            return bcBusinessCard;
+        }
+
+        public BusinessCard DbAdd(int iBusinessCardId)
+        {
+
+            return null;
+        }
+
+        public BusinessCard DbUpdate(int iBusinessCardId)
+        {
+
+            return null;
+        }
+
+        public BusinessCard DbDelete(int iBusinessCardId)
+        {
+
+            return null;
         }
     }
 }

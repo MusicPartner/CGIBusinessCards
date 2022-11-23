@@ -17,6 +17,7 @@
 // ****************************************************
 
 using CGI.BusinessCards.Web.Api.Models.Entities;
+using CGI.BusinessCards.Web.Api.Models.Entities.Dto;
 
 using System.Collections.Generic;
 
@@ -24,7 +25,10 @@ namespace CGI.BusinessCards.Web.Api.Services.Interfaces
 {
     public interface IBusinessCardService
     {
-        IEnumerable<BusinessCard> GetAll(string pairingToken);
-        BusinessCard Get(int businessCardId);
+        IEnumerable<BusinessCard> GetAll();
+        BusinessCard Get(int iBusinessCardId);
+        BusinessCard Add(BusinessCardDTO bcdDusinessCard);
+        BusinessCard Update(BusinessCardDTO bcdDusinessCard);
+        BusinessCard Delete(int iBusinessCardId);
     }
 }
