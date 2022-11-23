@@ -85,8 +85,8 @@ namespace BusinessCards.Web.Api
             });
 
             // Get Secrets and Store Static
-            ApplicationSettingsGlobal.businessCardsSwaggerUser = builder.Configuration["CGIBusinessCards:SwaggerAuthenticationUser"];
-            ApplicationSettingsGlobal.businessCardsSwaggerPassword = builder.Configuration["CGIBusinessCards:SwaggerAuthenticationPassword"];
+            ApplicationSettingsGlobal.businessCardsSwaggerUser = builder.Configuration["CGIBusinessCards:SwaggerAuthenticationUser"] ?? "DonNotUse"; // Default if Not Set
+            ApplicationSettingsGlobal.businessCardsSwaggerPassword = builder.Configuration["CGIBusinessCards:SwaggerAuthenticationPassword"] ?? "!DoNotUse"; // Default if Not Set
 
             // Singletons
 

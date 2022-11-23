@@ -18,7 +18,6 @@
 
 using CGI.BusinessCards.Web.Api.Infrastructure.Common;
 using CGI.BusinessCards.Web.Api.Models.Entities;
-using CGI.BusinessCards.Web.Api.Models.Entities.Dto;
 using CGI.BusinessCards.Web.Api.Services.Interfaces;
 
 using Microsoft.Extensions.Logging;

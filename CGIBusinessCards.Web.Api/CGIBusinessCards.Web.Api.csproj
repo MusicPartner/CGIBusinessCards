@@ -8,7 +8,7 @@
 	<Company>CGI</Company>
 	<Copyright>Copyright © 2022 CGI</Copyright>
 	<Version>1.0.1</Version>
-    <UserSecretsId>21ad392b-55b6-41df-8dfa-f462cdbf28be</UserSecretsId>
+    <UserSecretsId>21ad392b-55b6-41df-8dfa-f462cdbf28bf</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
