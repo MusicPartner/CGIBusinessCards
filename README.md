@@ -1,6 +1,18 @@
 # CGIBusinessCards
 CGI Business Cards Project
 
+## Requirements:
+1. Local MSSQL Server
+2. Visual Studio
+
+## Used Components/Templates/Code:
+1. No External components are used
+2. Standard .NET 7.0 Templates was used as a base for the project
+3. Standard project structure was used (from my code library)
+4. BaseDataAccess code class is used (from my code library)
+5. SqlDataReader Extension is used (from my code library)
+6. Swagger Authorization CodeSnippet is used (from my code library)
+
 ## How to Install:
 
 ### Initialize Secret Store:
