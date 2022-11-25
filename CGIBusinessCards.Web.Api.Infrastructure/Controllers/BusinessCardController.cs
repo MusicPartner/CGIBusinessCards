@@ -54,7 +54,7 @@ namespace CGI.BusinessCards.Web.Api.Controllers
             // Get All BusinessCards
             IEnumerable<BusinessCard> businessCards = _businessCardService.GetAll();
 
-            //Check if NotFound
+            // Check if NotFound
             if (businessCards.Count() == 0)
             {
                 // Log
@@ -81,7 +81,7 @@ namespace CGI.BusinessCards.Web.Api.Controllers
                 });
             }
 
-            //Return List of BusinessCards (DTO)
+            // Return List of BusinessCards (DTO)
             return Ok(businessCardsDTO);
         }
 
@@ -146,7 +146,7 @@ namespace CGI.BusinessCards.Web.Api.Controllers
             }
 
             // Validate Input ID
-            if (bcBusinessCardDTO.Id > 0)
+            if (bcBusinessCardDTO.Id != 0)
             {
                 // Log
                 _logger.LogError("Add BusinessCard Invalid Id");
@@ -174,8 +174,8 @@ namespace CGI.BusinessCards.Web.Api.Controllers
                 // Log
                 _logger.LogError("Add BusinessCard Failed");
 
-                // Return Internal Server Error
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                // Return Bad Request
+                return BadRequest();
             }
 
             return CreatedAtRoute(nameof(GetBusinessCard), new { iBusinessCardId = bcAddBusinessCardResult.Id }, bcAddBusinessCardResult);
@@ -184,6 +184,7 @@ namespace CGI.BusinessCards.Web.Api.Controllers
         [HttpPut("{iBusinessCardId:int}", Name = "UpdateBusinessCard")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult UpdateBusinessCard(int iBusinessCardId, [FromBody] BusinessCardDTO bcBusinessCardDTO)
         {
             // Validate
@@ -218,6 +219,16 @@ namespace CGI.BusinessCards.Web.Api.Controllers
 
             // Update BusinessCard
             bool bResultAddBusinessCard = _businessCardService.Update(iBusinessCardId, bcBusinessCard);
+
+            // Check if Update Failed
+            if (bResultAddBusinessCard == false)
+            {
+                // Log
+                _logger.LogWarning("Update BusinessCard Failed");
+
+                // Return Bad Request
+                return BadRequest();
+            }
 
             return NoContent();
         }
@@ -256,7 +267,7 @@ namespace CGI.BusinessCards.Web.Api.Controllers
             if (bResultDeleteBusinessCard == false)
             {
                 // Log
-                _logger.LogWarning("Deelete BusinessCard Failed");
+                _logger.LogWarning("Delete BusinessCard Failed");
 
                 // Return Bad Request
                 return BadRequest();
@@ -265,6 +276,5 @@ namespace CGI.BusinessCards.Web.Api.Controllers
             // Return Result
             return NoContent();
         }
-        
     }
 }
